@@ -2,6 +2,20 @@
 
 angular.module('coffeeAndChill')
 
+
+.controller('TopNavCtrl', function ($scope) {
+  $scope.currentLocation = "500000 Forbes Avenue, Pittsburgh, PA";
+  // TODO: Get a method which retrieves user's current location
+})
+
+// Handles the highlighting of the side bar navigations
+.controller('SideNavCtrl', function($scope, $location) {
+    $scope.isActive = function(route) {
+        return route === $location.path();
+    };
+})
+
+
 .controller('MapCtrl', function ($scope) {
   // Retrieve information about various places.
   var places = [
@@ -81,15 +95,24 @@ angular.module('coffeeAndChill')
       marker.content = '<div class="infoWindowContent">' + place.description + '</div>';
     } else {
       marker.content = '<div class="infoWindowContent">' + "This is floor " + place.whichFloor + '</div>';
+      marker.content += '<div>';
       marker.content += '<a href="404">404</a><br>';
       marker.content += '<a href="about">About</a><br>';
       marker.content += '<a href="home">Home</a><br>';
       marker.content += '<a href="test">TEST</a><br>';
-
+      marker.content += '</div>';
 
     }
     return marker;
   }
+
+  $scope.submit = function () {
+    console.log("USER SUBMITTED");
+  };
+
+  var submit = function () {
+    console.log("USER asdf");
+  };
 
   var setMarkerEventListener = function (place, marker) {
     // Event listener for onclick
@@ -166,11 +189,11 @@ angular.module('coffeeAndChill')
         createMarker(floorBelow);
       }
     });
-  }
+}
 
-  var createMarker = function (place){
-    var marker = setMarker(place);
-    setMarkerEventListener(place, marker);
+var createMarker = function (place){
+  var marker = setMarker(place);
+  setMarkerEventListener(place, marker);
     // Add this marker into the global markers
     if (place.isBuilding) {
       $scope.buildingMarkers.push(marker);
@@ -198,7 +221,8 @@ angular.module('coffeeAndChill')
   for (var i = 0; i < places.length; i++){
     createMarker(places[i]);
   }
+})
 
-});
+;
 
 

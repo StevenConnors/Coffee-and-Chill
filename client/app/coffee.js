@@ -15,8 +15,7 @@ angular.module('coffeeAndChill', [
   $routeProvider
 
     .when('/', {
-      title: 'Home',
-      templateUrl: '/static/app/templates/ng-view/home.html',
+      redirectTo: '/home'
     })
 
     .when('/about', {
