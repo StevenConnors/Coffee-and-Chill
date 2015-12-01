@@ -81,6 +81,8 @@ angular.module('coffeeAndChill')
       marker.content = '<div class="infoWindowContent">' + place.description + '</div>';
     } else {
       marker.content = '<div class="infoWindowContent">' + "This is floor " + place.whichFloor + '</div>';
+      marker.content += '<a href="404.html">Click on me if u want to 404</a>';
+
     }
     return marker;
   }
@@ -119,8 +121,10 @@ angular.module('coffeeAndChill')
         } 
       }
 
-      // Open infoWindow box
+      // This directive isn't working.
       // var content = '<info-box-text info="marker"></info-box-text>';
+      
+      // Open infoWindow box
       var content = '<h2>' + marker.title + '</h2>' + marker.content;
       infoWindow.setContent(content);
       infoWindow.open($scope.map, marker);
