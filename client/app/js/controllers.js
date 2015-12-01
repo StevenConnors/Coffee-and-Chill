@@ -81,7 +81,11 @@ angular.module('coffeeAndChill')
       marker.content = '<div class="infoWindowContent">' + place.description + '</div>';
     } else {
       marker.content = '<div class="infoWindowContent">' + "This is floor " + place.whichFloor + '</div>';
-      marker.content += '<a href="404.html">Click on me if u want to 404</a>';
+      marker.content += '<a href="404">404</a><br>';
+      marker.content += '<a href="about">About</a><br>';
+      marker.content += '<a href="home">Home</a><br>';
+      marker.content += '<a href="test">TEST</a><br>';
+
 
     }
     return marker;
