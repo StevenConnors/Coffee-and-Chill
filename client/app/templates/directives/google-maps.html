@@ -1,0 +1,9 @@
+<!-- The Google Maps portion -->
+<div ng-app="coffeeAndChill" ng-controller="MapCtrl">
+	<div id="map"></div>
+	<div id="class" ng-repeat="marker in markers | orderBy : 'title'">
+		<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
+	</div>
+</div>
+
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyA6oRWOV5zJolIO10AdQdZRKR-ADmTSi-Y"></script>

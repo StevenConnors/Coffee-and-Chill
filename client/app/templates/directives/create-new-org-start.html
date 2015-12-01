@@ -1,0 +1,13 @@
+<div>
+  Create New Organization
+	<div class="sub-header v-padding-medium h-padding-medium list-block">  
+	  <form class="form-group edit-conversation" ng-submit="createNewOrg()">
+	    <input class="short inline-block two-fifths name" type="text" placeholder="New Organization Name" ng-model="org_name">
+	    <input class="short inline-block fifth name" type="text" placeholder="Org Reference Name" ng-model="org_ref_name">
+	    <input type="submit" ng-show="isUnique() && !isEmpty()"  name="" value="Submit" class="button success-color inline-block fifth">
+  	  <input ng-show="!isUnique() || isEmpty()" name="" value="Empty or Invalid Ref" class="button error-color inline-block fifth">
+	  </form>
+	  <br>
+	  <div ng-show="!isUnique()"> Org Reference Name cannot be empty and has to be unique within entire app. Please change it</div>
+	</div>
+</div>
