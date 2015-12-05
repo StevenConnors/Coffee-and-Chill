@@ -1,7 +1,7 @@
 <!-- The Google Maps portion -->
 <div ng-app="coffeeAndChill" ng-controller="MapCtrl">
 	<div id="map"></div>
-	<div id="class" ng-repeat="marker in markers | orderBy : 'title'">
+	<div id="class" ng-repeat="marker in buildingMarkers | orderBy : 'title'">
 		<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
 	</div>
 </div>

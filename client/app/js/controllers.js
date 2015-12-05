@@ -10,13 +10,13 @@ angular.module('coffeeAndChill')
 
 // Handles the highlighting of the side bar navigations
 .controller('SideNavCtrl', function($scope, $location) {
-    $scope.isActive = function(route) {
-        return route === $location.path();
-    };
+  $scope.isActive = function(route) {
+    return route === $location.path();
+  };
 })
 
 
-.controller('MapCtrl', function ($scope) {
+.controller('MapCtrl', function ($scope, $compile, $timeout) {
   // Retrieve information about various places.
   var places = [
   {
@@ -82,10 +82,15 @@ angular.module('coffeeAndChill')
       anchor: new google.maps.Point(0, 48)
     };
 
-    var marker = new google.maps.Marker({
-      index : $scope.buildingMarkers.length,
+    var markerLabel = "";
+    if (!place.isBuilding) {
+      markerLabel = place.whichFloor.toString();
+    }
 
+    var marker = new google.maps.Marker({
+      index: $scope.buildingMarkers.length, 
       map: $scope.map,
+      label: markerLabel,
       position: new google.maps.LatLng(place.lat, place.lng),
       title: place.place,
       // icon: red,
@@ -101,7 +106,6 @@ angular.module('coffeeAndChill')
       marker.content += '<a href="home">Home</a><br>';
       marker.content += '<a href="test">TEST</a><br>';
       marker.content += '</div>';
-
     }
     return marker;
   }
@@ -148,15 +152,45 @@ angular.module('coffeeAndChill')
         } 
       }
 
-      // This directive isn't working.
-      // var content = '<info-box-text info="marker"></info-box-text>';
-      
       // Open infoWindow box
       var content = '<h2>' + marker.title + '</h2>' + marker.content;
-      infoWindow.setContent(content);
-      infoWindow.open($scope.map, marker);
-
+      content += "<div>{{foo}}<br/>{{foo}}</div>";
       
+      console.log(content);
+
+      $scope.foo="bar";
+      var el = $compile(content)($scope);
+
+      console.log(el);
+
+/////TOODOOOSODfa;eaiefwa
+
+
+      $scope.$evalAsync(function() {
+        $scope.$apply();
+        infoWindow.setContent(el.html());
+        infoWindow.open($scope.map, marker);          
+      });
+
+
+// google.maps.event.addListener(
+//       marker,
+//       'click',
+//       (function( marker , scope, localLatLng ){
+//         return function(){
+//           var content = '<div id="infowindow_content" ng-include src="\'infowindow.html\'"></div>';
+//           scope.latLng = localLatLng;
+//           var compiled = $compile(content)(scope);
+//           scope.$apply();
+//           infowindow.setContent( compiled[0].innerHTML );
+//           infowindow.open( Map , marker );
+//         };//return fn()
+//       })( marker , scope, scope.markers[i].locations )
+
+
+
+
+
       // Create the markers for each floor in the building.
       var horzShift = 0.0005;
       for (var i = 0; i < place.floors; i++) {

@@ -1,8 +1,5 @@
 'use strict';
 
-var User       = require('./models/user/user.js');
-var Org        = require('./models/org/org.js');
-
 module.exports = function (app, passport) {
 
 
