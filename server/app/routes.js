@@ -6,7 +6,6 @@ var Floor   = require('./models/floor/floor.js');
 
 module.exports = function (app, passport) {
   app.get('/places/test', function (req, res) {
-    console.log("places");
     var places = [
     {
       place : 'Cohon University Center',
@@ -39,9 +38,62 @@ module.exports = function (app, passport) {
       isBuilding: true,
     },
     ];
-
     res.send(places);
   });
+
+
+
+  app.get('/floor/test', function (req, res) {
+    var floors = [
+    // cohon university center
+    {
+      place : 'Cohon University Center',
+      description : 'This is the best place in the world!',
+      lat : 40.443504,
+      lng : -79.9415,
+      crowdedness: 0,
+      basement_floors: -1,
+      floors: -1,
+      isBuilding: false,
+      whichFloor: "1",
+    },
+    {
+      place : 'Cohon University Center',
+      description : 'This is the best place in the world!',
+      lat : 40.443504,
+      lng : -79.9415,
+      crowdedness: 1,
+      basement_floors: -1,
+      floors: -1,
+      isBuilding: false,
+      whichFloor: "2",
+    },
+    {
+      place : 'Cohon University Center',
+      description : 'This is the best place in the world!',
+      lat : 40.443504,
+      lng : -79.9415,
+      crowdedness: 2,
+      basement_floors: -1,
+      floors: -1,
+      isBuilding: false,
+      whichFloor: "3",
+    },
+    {
+      place : 'Cohon University Center',
+      description : 'This is the best place in the world!',
+      lat : 40.443504,
+      lng : -79.9415,
+      crowdedness: -1,
+      basement_floors: -1,
+      floors: -1,
+      isBuilding: false,
+      whichFloor: "A",
+    }
+    ];
+    res.send(floors);
+  });
+
 
   app.get('/places/all', function (req, res) {
     Place.find({}, function (err, places){
@@ -50,7 +102,7 @@ module.exports = function (app, passport) {
       }
       res.send(places);
     });
-  })
+  });
 
   app.post('/places/create', function (req, res) {
     var place = new Place();
@@ -69,12 +121,9 @@ module.exports = function (app, passport) {
         console.log("place created");
       }
     });
-  })
+  });
 
 
-// MyModel.find( { createdOn: { $lte: request.createdOnBefore } } )
-// .limit( 10 )
-// .sort( '-createdOn' )
 
   app.get('/floor/all', function (req, res) {
     Floor.find({}, function (err, floors){
@@ -83,8 +132,40 @@ module.exports = function (app, passport) {
       }
       res.send(floors);
     });
-  })
+  });
 
+  app.post('/floor/update', function (req, res) {
+    var title = req.body.title;
+    var index = req.body.index;
+    var isBasement = req.body.isBasement;
+    var crowdedness = req.body.crowdedness;
+
+    var basementLetters = "ABCDEFGHIJKL";
+    var floorName = index;
+    if (isBasement) {
+      floorName = basementLetters[index];
+    }
+
+    Floor.find({'place' : title}, function (err, floors) {
+      for (var i = 0; i < floors.length; i++) {
+        if (floorName == floors[i].whichFloor) {
+          console.log("FOUND IT!");
+          var floor = floors[i];
+          floor.crowdedness = crowdedness;
+
+          console.log(floor);
+
+          floor.save(function (err) {
+            if (err) {
+              throw err;
+            } else {
+              console.log("Updated floor");
+            }
+          });
+        }
+      }
+    });
+  });
 
 
   app.get('/floor/:id', function (req, res) {
@@ -95,8 +176,7 @@ module.exports = function (app, passport) {
       }
       res.send(floors);
     });
-  })
-
+  });
 
 
 
@@ -118,7 +198,7 @@ module.exports = function (app, passport) {
         console.log("floor created");
       }
     });
-  })
+  });
 
 
 

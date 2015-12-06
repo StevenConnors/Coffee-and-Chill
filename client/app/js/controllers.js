@@ -74,11 +74,11 @@ angular.module('coffeeAndChill')
         description: $scope.description,
         lat: $scope.lat,
         lng: $scope.lng + horzShift * (i + 1),
-        popularity: -1,
         floors: -1,
         basement_floors: -1,
         isBuilding: false,
         whichFloor: (i+1),
+        crowdedness: $scope.crowdedness,
       });
     }
     var basementLetters = "ABCDEFGHJI";
@@ -88,11 +88,11 @@ angular.module('coffeeAndChill')
         description: $scope.description,
         lat: $scope.lat,
         lng: $scope.lng - horzShift * (i + 1),
-        popularity: -1,
         floors: -1,
         basement_floors: -1,
         isBuilding: false,
         whichFloor: basementLetters[i],
+        crowdedness: $scope.crowdedness,
       });
     }
     $location.path('/maps'); 
@@ -114,7 +114,7 @@ angular.module('coffeeAndChill')
         };
         // Retrieve information about various places.
         var places = [];
-        $http.get('/places/test')
+        $http.get('/places/all')
         .then(function (response) {
           places = response.data;
 
@@ -129,6 +129,10 @@ angular.module('coffeeAndChill')
         $scope.buildingMarkers = [];
 
         $scope.floorMarkers = [];
+
+        // Letters for the basement
+        $scope.basementLetters = "ABCDEFGHJI";
+
 
 
         // Create the text window when clicked on marker.
@@ -183,13 +187,19 @@ angular.module('coffeeAndChill')
       label: markerLabel,
       position: new google.maps.LatLng(place.lat, place.lng),
       title: place.place,
-      index: $scope.placeCount,
+      // index: $scope.placeCount,
+
+      // Below are properties of the place
+      basement_floors: place.basement_floors,
+      floors: place.floors,
+      isBuilding: place.isBuilding,
+      crowdedness: place.crowdedness,
     });
 
     if (place.isBuilding) {
       marker.content = '<div class="infoWindowContent">' + place.description + '</div>';
     } else {
-      switch(place.popularity) {
+      switch(place.crowdedness) {
         case -1:
           marker.content = '<div><h3 style="color:gray;">' + "This is floor " + place.whichFloor + '<br></h3></div>';
           marker.content += "<div> - There are no places available to study here.</div>";
@@ -208,7 +218,7 @@ angular.module('coffeeAndChill')
           break;
         default:
           console.log("ERROR: Invalid place.popuarlity value");
-          console.log(place.popularity);
+          console.log(place.crowdedness);
       }
     }
     return marker;
@@ -230,6 +240,7 @@ angular.module('coffeeAndChill')
         // Close InfoWindow
         $scope.infoWindow.close();
         return;
+
       } else {
         // Update $scope.focus
         $scope.focus = marker.index;
@@ -265,47 +276,33 @@ angular.module('coffeeAndChill')
       // Create the markers for each floor in the building.
       $http.get('/floor/' + marker.title).then(function (response) {
         console.log("Getting floor by its owner title");
-        console.log(response.data);
+        // console.log(response.data);
         var horzShift = 0.0005;
-        for (var i = 0; i < place.floors; i++) {
-          var floorAbove = {
-            place: place.place,
-            description: place.description,
-            lat: place.lat,
-            lng: place.lng + horzShift * (i + 1),
-            popularity: 2,
-            floors: -1,
-            basement_floors: -1,
-            isBuilding: false,
-            whichFloor: (i+1),
-          }
-          createMarker(floorAbove);
-        }
-        var basementLetters = "ABCDEFGHJI";
-        for (var i = 0; i < place.basement_floors; i++) {
-          var floorBelow = {
-            place: place.place,
-            description: place.description,
-            lat: place.lat,
-            lng: place.lng - horzShift * (i + 1),
-            popularity: -1,
-            floors: -1,
-            basement_floors: -1,
-            isBuilding: false,
-            whichFloor: basementLetters[i],
-          }
-          createMarker(floorBelow);
+
+        for (var i = 0; i < response.data.length; i++) {
+          var floor = response.data[i];
+          createMarker(floor);
         }
       });
 
 
 
 
-
-  });
-}
+   });
+  }
 
   
+  $scope.submit = function (title, index, isBasement, crowdedness) {
+    console.log("controllers.submit");
+
+    $http.post("/floor/update", {
+      title: title,
+      index: index,
+      isBasement: isBasement,
+      crowdedness, crowdedness
+    });
+  }
+
   var objectIsInList = function (obj, list) {
     for (var i = 0; i < list.length; i++) {
       if (list[i] === obj) {
@@ -315,59 +312,62 @@ angular.module('coffeeAndChill')
     return false;
   }
 
-  // This is for the text at the bottom of the map. If that's clicked, trigger an event on the pins.
-  $scope.openInfoWindow = function(e, selectedMarker){
-    google.maps.event.trigger(selectedMarker, 'click');
-  }
+  // //TODO concurrency issues
+  // $scope.createRandomPlace = function () {
+  //   var place = "Hunt Library";
+  //   var description = "CS Majors";
+  //   var lat = 40.443830;
+  //   var lng = -79.944539;
+  //   var basement_floors = 2;
+  //   var floors = 2;
 
-  //TODO concurrency issues
-  $scope.createRandomPlace = function () {
-    console.log("createRandomPlace");
-    $http.post('/places/create', {
-      place: "asdfasdf",
-      description: "CS Majors",
-      lat: 40.443830,
-      lng: -79.944539,
-      crowdedness: 2,
-      basement_floors: 0,
-      floors: 9,
-      isBuilding: true,
-    });
+  //   console.log("createRandomPlace");
+  //   $http.post('/places/create', {
+  //     place: place,
+  //     description: description,
+  //     lat: lat,
+  //     lng: lng,
+  //     crowdedness: 2,
+  //     basement_floors: basement_floors,
+  //     floors: floors,
+  //     isBuilding: true,
+  //   });
 
-    console.log("created place");
-    // Create the floors. Starting from top
-    var horzShift = 0.0005;
-    for (var i = 0; i < $scope.floors; i++) {
-      $http.post('/floor/create', {
-        place: $scope.place,
-        description: $scope.description,
-        lat: $scope.lat,
-        lng: $scope.lng + horzShift * (i + 1),
-        popularity: -1,
-        floors: -1,
-        basement_floors: -1,
-        isBuilding: false,
-        whichFloor: (i+1),
-      });
-    }
-    var basementLetters = "ABCDEFGHJI";
-    for (var i = 0; i < $scope.basement_floors; i++) {
-      $http.post('/floor/create', {
-        place: $scope.place,
-        description: $scope.description,
-        lat: $scope.lat,
-        lng: $scope.lng - horzShift * (i + 1),
-        popularity: -1,
-        floors: -1,
-        basement_floors: -1,
-        isBuilding: false,
-        whichFloor: basementLetters[i],
-      });
-    }
-    console.log("created floors");
-    console.log("Done");
+  //   console.log(place);
 
-  }
+  //   console.log("created place");
+  //   // Create the floors. Starting from top
+  //   var horzShift = 0.0005;
+  //   for (var i = 0; i < floors; i++) {
+  //     $http.post('/floor/create', {
+  //       place: place,
+  //       description: description,
+  //       lat: lat,
+  //       lng: lng + horzShift * (i + 1),
+  //       crowdedness: -1,
+  //       floors: -1,
+  //       basement_floors: -1,
+  //       isBuilding: false,
+  //       whichFloor: (i+1),
+  //     });
+  //   }
+  //   var basementLetters = "ABCDEFGHJI";
+  //   for (var i = 0; i < basement_floors; i++) {
+  //     $http.post('/floor/create', {
+  //       place: place,
+  //       description: description,
+  //       lat: lat,
+  //       lng: lng - horzShift * (i + 1),
+  //       crowdedness: -1,
+  //       floors: -1,
+  //       basement_floors: -1,
+  //       isBuilding: false,
+  //       whichFloor: basementLetters[i],
+  //     });
+  //   }
+  //   console.log("created floors");
+  //   console.log("Done");
+  // }
 
   $scope.getAllPlaces = function () {
     $http.get('/places/all').success(function (response) {
@@ -377,6 +377,35 @@ angular.module('coffeeAndChill')
       console.log(response);
     });
   }
+
+  // Below is code for more UI oriented stuff
+
+  $scope.makeRange = function (num) { 
+    return new Array(num);
+  }
+
+  $scope.showFloor = [];
+  $scope.showFloorUpdates = [];
+  $scope.showBasementUpdates = [];
+
+  // This is for the text at the bottom of the map. If that's clicked, trigger an event on the pins.
+  $scope.openInfoWindowAndTriggerDetails = function(e, selectedMarker, index){
+    google.maps.event.trigger(selectedMarker, 'click');
+
+    $scope.showFloor[index] = !$scope.showFloor[index];
+  }
+
+  $scope.triggerFloorDetails = function(index){
+    $scope.showFloorUpdates[index] = !$scope.showFloorUpdates[index];
+  }
+
+  $scope.triggerBasementDetails = function(index){
+    console.log(index);
+    console.log($scope.showBasementUpdates[index]);
+    $scope.showBasementUpdates[index] = !$scope.showBasementUpdates[index];
+  }
+
+
 
 
 })

@@ -2,9 +2,9 @@
 <div ng-controller="MapCtrl" ng-init="init()">
 	
 	<h4>Guide</h4><div id="instructions">
-		Click on the icon to see more information about the place. If the place has multiple floors, the pins will expand to give you more information about each floor.
+	Click on the icon to see more information about the place. If the place has multiple floors, the pins will expand to give you more information about each floor.
 
-		The coloring of the title represents different crowdedness. Red means no seats, Yellow is some seats, Green is many seats, Gray is N/A</div>
+	The coloring of the title represents different crowdedness. Red means no seats, Yellow is some seats, Green is many seats, Gray is N/A</div>
 	<hr><br>
 
 
@@ -13,18 +13,34 @@
 	<div> Don't see the place you're looking for? Click <a href="add-place">here</a> to add your place!</div>
 
 	<div id="class" ng-repeat="marker in buildingMarkers | orderBy : 'title'">
-		<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}, {{$index}}</a>
+		<a href="#" ng-hide="showFloor[$index]" ng-click="openInfoWindowAndTriggerDetails($event, marker, $index)"><i class="fa fa-long-arrow-down"></i>{{marker.title}}</a>
+		<a href="#" ng-show="showFloor[$index]" ng-click="openInfoWindowAndTriggerDetails($event, marker, $index)"><i class="fa fa-long-arrow-up"></i>{{marker.title}}</a>
+		<div ng-show="showFloor[$index]">
+			
+			<div ng-repeat="i in makeRange(marker.basement_floors) track by $index">
+				<div ng-click="triggerBasementDetails($index)"> {{marker.title}}: Floor {{basementLetters.charAt($index)}} </div>
+				<ul ng-show="showBasementUpdates[$index]">
+					<li> Update Floor Status </li>
+					<li ng-click="submit(marker.title, $index, true, 2)"> Crowded </li>
+					<li ng-click="submit(marker.title, $index, true, 1)"> Somewhat Available</li>
+					<li ng-click="submit(marker.title, $index, true, 0)"> Available </li>
+				</ul>
+			</div>
 
-		<div id="class" ng-repeat="floorMarker in floorMarkers">
-			<li><a>{{floorMarker.title}}</a></li>
-				<div>Update Place: No Space</div>
-				<div>Update Place: Some Space</div>
-				<div>Update Place: Lots of Space</div>
+			<div ng-repeat="i in makeRange(marker.floors) track by $index">
+				<div ng-click="triggerFloorDetails($index)"> {{marker.title}}: Floor {{$index+1}} </div>
+				<ul ng-show="showFloorUpdates[$index]">
+					<li> Update Floor Status </li>
+					<li ng-click="submit(marker.title, $index+1, false, 2)"> Crowded </li>
+					<li ng-click="submit(marker.title, $index+1, false, 1)"> Somewhat Available</li>
+					<li ng-click="submit(marker.title, $index+1, false, 0)"> Available </li>
+				</ul>
+			</div>
+			
+			<hr>
 		</div>
-
 	</div>
 
-	
 	<br>
 	<button ng-click="createRandomPlace()">Create</button>
 	<button ng-click="getAllPlaces()">Get All Places</button>
