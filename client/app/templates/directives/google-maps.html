@@ -1,21 +1,31 @@
 <!-- The Google Maps portion -->
 <div ng-controller="MapCtrl" ng-init="init()">
-	<div id="instructions"> Red means no seats, Yellow is some seats, Green is many seats, Gray is N/A</div>
+	
+	<h4>Guide</h4><div id="instructions">
+		Click on the icon to see more information about the place. If the place has multiple floors, the pins will expand to give you more information about each floor.
+
+		The coloring of the title represents different crowdedness. Red means no seats, Yellow is some seats, Green is many seats, Gray is N/A</div>
+	<hr><br>
+
 
 	<div id="map"></div>
-	<div id="class" ng-repeat="marker in buildingMarkers | orderBy : 'title'">
-		<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
-
-		<div id="class" ng-repeat="floorMarker in floorMarkers | orderBy : 'title'">
-			<a href="#">{{floorMarker.title}}</a>
-		</div>
-
-
-
-	</div>
 
 	<div> Don't see the place you're looking for? Click <a href="add-place">here</a> to add your place!</div>
 
+	<div id="class" ng-repeat="marker in buildingMarkers | orderBy : 'title'">
+		<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}, {{$index}}</a>
+
+		<div id="class" ng-repeat="floorMarker in floorMarkers">
+			<li><a>{{floorMarker.title}}</a></li>
+				<div>Update Place: No Space</div>
+				<div>Update Place: Some Space</div>
+				<div>Update Place: Lots of Space</div>
+		</div>
+
+	</div>
+
+	
+	<br>
 	<button ng-click="createRandomPlace()">Create</button>
 	<button ng-click="getAllPlaces()">Get All Places</button>
 

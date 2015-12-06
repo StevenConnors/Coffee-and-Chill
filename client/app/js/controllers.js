@@ -95,6 +95,7 @@ angular.module('coffeeAndChill')
         whichFloor: basementLetters[i],
       });
     }
+    $location.path('/maps'); 
   }
 
 })
@@ -125,8 +126,10 @@ angular.module('coffeeAndChill')
         $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
         // Create variable for the markers
-        $scope.floorMarkers = [];
         $scope.buildingMarkers = [];
+
+        $scope.floorMarkers = [];
+
 
         // Create the text window when clicked on marker.
         $scope.infoWindow = new google.maps.InfoWindow();
@@ -134,6 +137,8 @@ angular.module('coffeeAndChill')
         // Focus variable to keep track of which marker has the focus
         $scope.focus = -1;
 
+        // Variable to keep track of the number of places on the map
+        $scope.placeCount = 0;
         // Create markers from the data retrieved from back end.
         for (var i = 0; i < places.length; i++){
           createMarker(places[i]);
@@ -153,17 +158,19 @@ angular.module('coffeeAndChill')
   }
 
   var createMarker = function (place) {
-    var marker = setMarker(place);
+    var marker = initMarker(place);
     setMarkerEventListener(place, marker);
     // Add this marker into the global markers
     if (place.isBuilding) {
+      $scope.placeCount += 1;
       $scope.buildingMarkers.push(marker);
     } else {
+      // Get the marker's parent's name and match that to the index of the 2d array
       $scope.floorMarkers.push(marker);
     }
   }  
 
-  var setMarker = function (place) {
+  var initMarker = function (place) {
     // Case on the crowdedness to determine icon
     var markerLabel = "";
     if (!place.isBuilding) {
@@ -176,6 +183,7 @@ angular.module('coffeeAndChill')
       label: markerLabel,
       position: new google.maps.LatLng(place.lat, place.lng),
       title: place.place,
+      index: $scope.placeCount,
     });
 
     if (place.isBuilding) {
@@ -200,7 +208,7 @@ angular.module('coffeeAndChill')
           break;
         default:
           console.log("ERROR: Invalid place.popuarlity value");
-         console.log(marker.popularity);
+          console.log(place.popularity);
       }
     }
     return marker;
@@ -253,6 +261,7 @@ angular.module('coffeeAndChill')
       });
 
 
+
       // Create the markers for each floor in the building.
       $http.get('/floor/' + marker.title).then(function (response) {
         console.log("Getting floor by its owner title");
@@ -288,24 +297,28 @@ angular.module('coffeeAndChill')
           createMarker(floorBelow);
         }
       });
-});
+
+
+
+
+
+  });
 }
 
-var objectIsInList = function (obj, list) {
-  for (var i = 0; i < list.length; i++) {
-    if (list[i] === obj) {
-      return true;
+  
+  var objectIsInList = function (obj, list) {
+    for (var i = 0; i < list.length; i++) {
+      if (list[i] === obj) {
+        return true;
+      }
     }
+    return false;
   }
-  return false;
-}
 
   // This is for the text at the bottom of the map. If that's clicked, trigger an event on the pins.
   $scope.openInfoWindow = function(e, selectedMarker){
     google.maps.event.trigger(selectedMarker, 'click');
   }
-
-
 
   //TODO concurrency issues
   $scope.createRandomPlace = function () {

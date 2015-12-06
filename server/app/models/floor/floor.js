@@ -18,22 +18,3 @@ var floorSchema = mongoose.Schema({
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('Floor', floorSchema);
-
-
-
-
-
-
-
-
-
-
-          // place: place.place,
-          // description: place.description,
-          // lat: place.lat,
-          // lng: place.lng - horzShift * (i + 1),
-          // popularity: -1,
-          // floors: -1,
-          // basement_floors: -1,
-          // isBuilding: false,
-          // whichFloor: basementLetters[i],

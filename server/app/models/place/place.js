@@ -13,7 +13,6 @@ var placeSchema = mongoose.Schema({
     basement_floors: Number,
     floors: Number,
     isBuilding: Boolean,
-    // floor_objs: 
 });
 
 // create the model for users and expose it to our app
