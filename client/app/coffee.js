@@ -2,9 +2,12 @@
 
 
 angular.module('coffeeAndChill', [
-  'coffeeService',
+  'ngCookies',
+  'ngResource',
+  'ngSanitize',
   'ngRoute',
-  ])
+  'duScroll',
+])
 
 
 .config(function ($routeProvider, $locationProvider, $httpProvider) {
@@ -33,10 +36,6 @@ angular.module('coffeeAndChill', [
     .when('/404', {
       title: 'Page Not Found',
       templateUrl: '/static/404.html',
-    })
-
-    // Test to show nothing
-    .when('/405', {
     })
 
     .otherwise({
