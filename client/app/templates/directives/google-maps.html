@@ -1,9 +1,17 @@
 <!-- The Google Maps portion -->
-<div ng-app="coffeeAndChill" ng-controller="MapCtrl">
+<div ng-controller="MapCtrl" ng-init="init()">
+	<div id="instructions"> Red means no seats, Yellow is some seats, Green is many seats, Gray is N/A</div>
+
 	<div id="map"></div>
 	<div id="class" ng-repeat="marker in buildingMarkers | orderBy : 'title'">
 		<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
-	</div>
-</div>
 
-<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyA6oRWOV5zJolIO10AdQdZRKR-ADmTSi-Y"></script>
+
+	</div>
+
+	<div> Don't see the place you're looking for? Click <a href="add-place">here</a> to add your place!</div>
+
+	<button ng-click="createRandomPlace()">Create</button>
+	<button ng-click="getAllPlaces()">Get All Places</button>
+
+</div>

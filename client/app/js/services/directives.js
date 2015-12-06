@@ -24,14 +24,9 @@ angular.module('coffeeAndChill')
 .directive("infoBoxText", function () {
 	return {
 		restrict: "E",
-		scope: {
-			marker: "=marker"
-		},
-		templateUrl: "/static/app/templates/directives/info-box-text.html",
+		templateUrl: "/static/app/templates/directives/info-box-text.html"
 	}
 })
-
-
 
 ;
 

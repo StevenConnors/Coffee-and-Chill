@@ -8,10 +8,12 @@ var placeSchema = mongoose.Schema({
     place : String,
     description : String,
     lat : Number,
-    long : Number,
-    popularity: Number,
+    lng : Number,
+    crowdedness: Number,
     basement_floors: Number,
     floors: Number,
+    isBuilding: Boolean,
+    // floor_objs: 
 });
 
 // create the model for users and expose it to our app

@@ -1,16 +1,13 @@
 <div class="col-sm-3 col-md-2 sidebar" ng-controller="SideNavCtrl">
 	<ul class="nav nav-sidebar">
+		<li ng-class="{active: isActive('/maps')}">
+			<a href="maps"> Maps</a>
+		</li>
 		<li ng-class="{active: isActive('/about')}">
-			<a href="about"> About</a>
+			<a href="about"> About </a>
 		</li>
-		<li ng-class="{active: isActive('/test')}">
-			<a href="test"> Test </a>
-		</li>
-		<li ng-class="{active: isActive('/home')}">
-			<a href="home"> Home </a>
-		</li>
-		<li ng-class="{active: isActive('/404')}">
-			<a href="404"> 404 </a>
+		<li ng-class="{active: isActive('/add-place')}">
+			<a href="add-place"> Add Place </a>
 		</li>
 	</ul>
 </div>

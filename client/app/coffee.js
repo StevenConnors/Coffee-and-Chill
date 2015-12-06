@@ -7,40 +7,45 @@ angular.module('coffeeAndChill', [
   'ngSanitize',
   'ngRoute',
   'duScroll',
-])
+  ])
 
 
 .config(function ($routeProvider, $locationProvider, $httpProvider) {
 
   $routeProvider
+  .when('/', {
+    redirectTo: '/home'
+  })
 
-    .when('/', {
-      redirectTo: '/home'
-    })
+  .when('/about', {
+    title: 'Page Not Found',
+    templateUrl: '/static/app/templates/ng-view/about.html',
+  })
 
-    .when('/about', {
-      title: 'Page Not Found',
-      templateUrl: '/static/app/templates/ng-view/about.html',
-    })
+  .when('/maps', {
+    title: 'Page Not Found',
+    templateUrl: '/static/app/templates/ng-view/maps.html',
+  })
 
-    .when('/home', {
-      title: 'Page Not Found',
-      templateUrl: '/static/app/templates/ng-view/home.html',
-    })
+  .when('/add-place', {
+    title: 'Page Not Found',
+    templateUrl: '/static/app/templates/ng-view/add-place.html',
+  })
 
-    .when('/test', {
-      title: 'Page Not Found',
-      templateUrl: '/static/app/templates/ng-view/test.html',
-    })
 
-    .when('/404', {
-      title: 'Page Not Found',
-      templateUrl: '/static/404.html',
-    })
+  .when('/test', {
+    title: 'Page Not Found',
+    templateUrl: '/static/app/templates/ng-view/test.html',
+  })
 
-    .otherwise({
-      redirectTo: '/404'
-    });
+  .when('/404', {
+    title: 'Page Not Found',
+    templateUrl: '/static/404.html',
+  })
+
+  .otherwise({
+    redirectTo: '/404'
+  });
 
   $locationProvider.html5Mode(true);
 

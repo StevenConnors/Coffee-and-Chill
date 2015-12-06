@@ -1,0 +1,51 @@
+<div ng-controller="AddPlaceCtrl">
+	<div id="instructions"> Fill in the information below to add your place special place onto the map</div>
+	<br><br>
+	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Email address</label>
+			<input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" ng-model="email">
+			<p class="help-block">For us to contact you in case of any mis-information.</p>
+		</div>
+		<div class="form-group">
+			<label>Location Name</label>
+			<input class="form-control" placeholder="Location Name. eg. Newell-Simon Hall" ng-model="place">
+			<p class="help-block">Example block-level help text here.</p>
+		</div>
+
+		<div class="form-group">
+			<label>Description of the place</label>
+			<input class="form-control" placeholder="Description: Quiet, Calm, etc." ng-model="description">
+			<p class="help-block">Example block-level help text here.</p>
+		</div>
+		<div class="form-group">
+			<label>Latitude of the Place</label>
+			<input type="number" step="any" min="-180" max="180" class="form-control" placeholder="Latitude of the Place: eg 50.487320" ng-model="lat">
+			<p class="help-block">Example block-level help text here.</p>
+		</div>
+
+		<div class="form-group">
+			<label>Longtidude of the Place</label>
+			<input type="number" step="any" min="-180" max="180" class="form-control" placeholder="Longtidude of the Place: eg -47.29348" ng-model="lng">
+			<p class="help-block">Longitude of the place</p>
+		</div>
+		<div class="form-group">
+			<label>Crowdedness</label>
+			<input class="form-control" min="-1" max="2" placeholder="Crowdedness" ng-model="crowdedness">
+			<p class="help-block">How crowded the place is.</p>
+		</div>
+		<div class="form-group">
+			<label>Number of Basement Floors</label>
+			<input type="number" min="0" class="form-control" placeholder="Number of basement floors: can be 0" ng-model="basement_floors">
+			<p class="help-block">There can be no basement, which you would enter 0.</p>
+		</div>
+		<div class="form-group">
+			<label>Number of Floors</label>
+			<input type="number" min="1" class="form-control" placeholder="Number of floors: at least 1" ng-model="floors">
+			<p class="help-block">There has to be at least 1 floor.</p>
+		</div>
+
+		<button type="submit" class="btn btn-default" ng-click="submit()">Submit</button>
+	</form>
+</div>
+
