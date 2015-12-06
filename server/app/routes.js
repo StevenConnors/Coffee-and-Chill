@@ -72,6 +72,9 @@ module.exports = function (app, passport) {
   })
 
 
+// MyModel.find( { createdOn: { $lte: request.createdOnBefore } } )
+// .limit( 10 )
+// .sort( '-createdOn' )
 
   app.get('/floor/all', function (req, res) {
     Floor.find({}, function (err, floors){

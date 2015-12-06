@@ -6,6 +6,11 @@
 	<div id="class" ng-repeat="marker in buildingMarkers | orderBy : 'title'">
 		<a href="#" ng-click="openInfoWindow($event, marker)">{{marker.title}}</a>
 
+		<div id="class" ng-repeat="floorMarker in floorMarkers | orderBy : 'title'">
+			<a href="#">{{floorMarker.title}}</a>
+		</div>
+
+
 
 	</div>
 

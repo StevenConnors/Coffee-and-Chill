@@ -41,13 +41,6 @@ angular.module('coffeeAndChill')
 })
 
 
-
-
-
-
-
-
-
 // Handles the highlighting of the side bar navigations
 .controller('SideNavCtrl', function ($scope, $location) {
   $scope.isActive = function(route) {
@@ -155,9 +148,9 @@ angular.module('coffeeAndChill')
         lat: 40.443589,
         lng: -79.943556
       };
+      alert("Please update your browser to support geolocation");
     }
   }
-
 
   var createMarker = function (place) {
     var marker = setMarker(place);
@@ -309,12 +302,8 @@ var objectIsInList = function (obj, list) {
 
   // This is for the text at the bottom of the map. If that's clicked, trigger an event on the pins.
   $scope.openInfoWindow = function(e, selectedMarker){
-    e.preventDefault();
     google.maps.event.trigger(selectedMarker, 'click');
   }
-
-
-
 
 
 
