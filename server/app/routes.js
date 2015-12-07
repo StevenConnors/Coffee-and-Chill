@@ -41,8 +41,6 @@ module.exports = function (app, passport) {
     res.send(places);
   });
 
-
-
   app.get('/floor/test', function (req, res) {
     var floors = [
     // cohon university center
@@ -167,7 +165,6 @@ module.exports = function (app, passport) {
     });
   });
 
-
   app.get('/floor/:id', function (req, res) {
     console.log(req.params.id);
     Floor.find({'place' : req.params.id}, function (err, floors){
@@ -177,8 +174,6 @@ module.exports = function (app, passport) {
       res.send(floors);
     });
   });
-
-
 
   app.post('/floor/create', function (req, res) {
     var floor = new Floor();
@@ -199,9 +194,7 @@ module.exports = function (app, passport) {
       }
     });
   });
-
-
-
+  
 // =====================================
 // Client Side Requests ================
 // =====================================

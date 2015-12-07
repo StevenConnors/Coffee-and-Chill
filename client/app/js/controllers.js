@@ -209,7 +209,7 @@ angular.module('coffeeAndChill')
           marker.content += "<div> - This place has many seats available to study.</div>";
           break;
         case 1:
-          marker.content = '<div><h3 style="color:yellow;">' + "This is floor " + place.whichFloor + '<br></h3></div>';
+          marker.content = '<div><h3 style="color:orange;">' + "This is floor " + place.whichFloor + '<br></h3></div>';
           marker.content += "<div> - This place has a few seats left to study.</div>";
           break;
         case 2:
